@@ -11,11 +11,11 @@ spring:
       test:
         - oauth-local
 cors:
-  allowed-origin: 'http://localhost:3000'
+  allowed-origin: http://localhost:3000
 
 ---
 spring:
   config:
     activate:
       on-profile: prod
-    import: 'file:///home/ec2-user/app/config/'
+    import: file:///home/ec2-user/app/config/
