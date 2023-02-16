@@ -28,11 +28,14 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-    - name: Build with Gradle
-      uses: gradle/gradle-build-action@v2
-      with:
-        gradle-version : 7.5
+#    - name: Build with Gradle
+#      uses: gradle/gradle-build-action@v2
+#      with:
+#        gradle-version : 7.5
     - name: Permission
       run: |
+        pwd
+        echo "-----"
+        ls -la
         chmod +x ./gradlew
         ./gradlew build
