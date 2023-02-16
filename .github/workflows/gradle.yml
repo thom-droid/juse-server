@@ -35,4 +35,4 @@ jobs:
     - name: Permission
       run: |
         chmod +x ./gradlew
-        ./gradlew build --debug
+        ./gradlew build
