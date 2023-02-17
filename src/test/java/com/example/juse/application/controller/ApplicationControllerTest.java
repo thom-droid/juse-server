@@ -1,12 +1,14 @@
 package com.example.juse.application.controller;
 
-import com.example.juse.JuseApplicationTests;
+import com.example.juse.TestDBInstance;
 import com.example.juse.application.entity.Application;
 import com.example.juse.application.repository.ApplicationRepository;
 import com.example.juse.board.entity.Board;
 import com.example.juse.board.repository.BoardRepository;
 import com.example.juse.notification.entity.Notification;
 import com.example.juse.notification.repository.NotificationRepository;
+import com.example.juse.security.jwt.JwtTokenProvider;
+import com.example.juse.security.jwt.TokenDto;
 import com.example.juse.user.entity.User;
 import com.example.juse.user.repository.UserRepository;
 import com.google.gson.Gson;
@@ -14,7 +16,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -24,8 +29,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestPropertySource(locations = {"/application.properties", "/application-oauth-local.properties"})
+@Import(TestDBInstance.class)
+@SpringBootTest
 @AutoConfigureMockMvc
-class ApplicationControllerTest extends JuseApplicationTests {
+class ApplicationControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -45,14 +53,34 @@ class ApplicationControllerTest extends JuseApplicationTests {
     @Autowired
     Gson gson;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+    protected String accessToken;
 
     private final String requestMappingUrl = "http://localhost:8080";
 
     @BeforeEach
+    void setup() {
+        initJwtToken();
+        destroy();
+    }
+    public void initJwtToken() {
+
+        TokenDto token = jwtTokenProvider.generateToken("test2@gmail.com", "ROLE_MEMBER");
+        accessToken = token.getAccessToken();
+
+    }
+
     public void destroy() {
         applicationRepository.deleteAll();
         notificationRepository.deleteAll();
 
+    }
+
+    public void setTokenAsBoardWriter() {
+
+        TokenDto token = jwtTokenProvider.generateToken("test1@gmail.com", "ROLE_MEMBER");
+        accessToken = token.getAccessToken();
     }
 
     @Test

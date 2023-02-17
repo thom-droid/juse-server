@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ActiveProfiles({"test"})
+//@ActiveProfiles({"test"})
 class UrlTestControllerTest {
 
     @Autowired

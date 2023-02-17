@@ -8,8 +8,8 @@ spring:
         - db-prod
         - oauth-prod
         - config-prod
-      test:
-        - oauth-local
+#      test:
+#        - oauth-local
 cors:
   allowed-origin: http://localhost:3000
 

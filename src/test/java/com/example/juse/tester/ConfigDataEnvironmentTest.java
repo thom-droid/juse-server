@@ -6,9 +6,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestPropertySource(locations = {"/application.properties", "/application-oauth-local.properties"})
 public class ConfigDataEnvironmentTest {
 
     private SpringApplication springApplication;

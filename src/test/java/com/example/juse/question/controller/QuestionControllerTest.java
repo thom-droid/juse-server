@@ -1,9 +1,11 @@
 package com.example.juse.question.controller;
 
-import com.example.juse.JuseApplicationTests;
+import com.example.juse.TestDBInstance;
 import com.example.juse.notification.repository.NotificationRepository;
 import com.example.juse.notification.service.NotificationService;
 import com.example.juse.question.dto.QuestionRequestDto;
+import com.example.juse.security.jwt.JwtTokenProvider;
+import com.example.juse.security.jwt.TokenDto;
 import com.example.juse.user.repository.UserRepository;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +15,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -23,7 +28,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
-class QuestionControllerTest extends JuseApplicationTests {
+@TestPropertySource(locations = {"/application.properties", "/application-oauth-local.properties"})
+@Import(TestDBInstance.class)
+@SpringBootTest
+class QuestionControllerTest {
 
     private final String mappingUrl = "http://localhost:8080/questions";
     @Autowired
@@ -40,6 +48,29 @@ class QuestionControllerTest extends JuseApplicationTests {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    private String accessToken;
+
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
+
+    @BeforeEach
+    void setup() {
+        initJwtToken();
+    }
+
+    public void initJwtToken() {
+
+        TokenDto token = jwtTokenProvider.generateToken("test2@gmail.com", "ROLE_MEMBER");
+        accessToken = token.getAccessToken();
+
+    }
+
+    public void setTokenAsBoardWriter() {
+
+        TokenDto token = jwtTokenProvider.generateToken("test1@gmail.com", "ROLE_MEMBER");
+        accessToken = token.getAccessToken();
+    }
 
     @BeforeEach
     public void destroy() {
