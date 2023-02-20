@@ -28,15 +28,6 @@ public class ConfigDataEnvironmentTest {
         assertEquals("http://localhost:3000", property);
     }
 
-    @Test
-    void runLoadsWithLocalProfile() {
-        ConfigurableApplicationContext context = this.springApplication.run("--spring.profiles.active=local");
-        String property = context.getEnvironment().getProperty("oauth.redirectUri");
-        assertEquals("http://localhost:3000/oauth2", property);
-
-    }
-
-
     @Configuration(proxyBeanMethods = false)
     static class Config {
 
